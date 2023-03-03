@@ -26,18 +26,22 @@ for (i in 1:10) {
 }
 
 #plotting acf and pacf
-A <- acf(y[i,],main="ACF",plot = FALSE) 
-A$lag
 for (i in 1:10) {
     ACF <- acf(y[i,],main="ACF",plot = FALSE) 
     if (i == 1) {
     plot(ACF$lag,ACF$acf,type="h",col=toString(colours[i]),xlab="lag",ylab="ACF")
+    #lines(ACF$acf, ci.type="white",col=toString(colours[i]))
     }
     else {
     lines(ACF$lag,ACF$acf,type="h",col=toString(colours[i]))  
+    # lines(ACF, ci.type="white",col=toString(colours[i]))
     }
 
 }
+#confidence intervals:
+ci = 0.95
+abline(h=qnorm((1 + ci)/2)/sqrt(n),lty=2)
+abline(h=-qnorm((1 + ci)/2)/sqrt(n),lty=2)
 abline(h = 0)
 
 for (i in 1:10) {
@@ -50,4 +54,6 @@ for (i in 1:10) {
     }
 
 }
+abline(h=qnorm((1 + ci)/2)/sqrt(n),lty=2)
+abline(h=-qnorm((1 + ci)/2)/sqrt(n),lty=2)
 abline(h = 0)
