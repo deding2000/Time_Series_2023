@@ -1,18 +1,53 @@
-#simulering
-p <- 1 # AR order
-q <- 0# MA order
+#simulering 
+p <- 2 # AR order
+q <- 3# MA order
 
-n <- 5000
-
-theta <- runif(p,-1/p,1/p)
-phi <- runif(q,-1/q,1/q)
-
-Y <- arima.sim(list(ar=theta,ma=phi),n)
-
-par(mfrow=c(1,2))
-
-acf(Y,main="ACF")
-pacf(Y,main="PACF")
+theta <- c(-0.8)
+phi <- c(0.8,-0.5)
 
 cat("AR parameters:",round(theta,3))
 cat("MA parameters:",round(phi,3))
+n <- 200
+colours = list("blue","red","green","orange","purple","black","magenta","pink","chartreuse","yellow")
+set.seed(1213)
+y = matrix(0,10,200)
+# plotting realizations
+for (i in 1:10) {
+    # set.seed(i)
+    ts <- arima.sim(list(ar=theta,ma=phi), n, sd=0.4)
+    y[i,] <- ts[1:200]
+    t = c(1:200)
+    if (i == 1) {
+    plot(t,y[i,],type="l",col=toString(colours[i]),xlab="t",ylab="X_t")
+    }
+    else {
+    lines(t,y[i,],type="l",col=toString(colours[i]))  
+    }
+}
+
+#plotting acf and pacf
+A <- acf(y[i,],main="ACF",plot = FALSE) 
+A$lag
+for (i in 1:10) {
+    ACF <- acf(y[i,],main="ACF",plot = FALSE) 
+    if (i == 1) {
+    plot(ACF$lag,ACF$acf,type="h",col=toString(colours[i]),xlab="lag",ylab="ACF")
+    }
+    else {
+    lines(ACF$lag,ACF$acf,type="h",col=toString(colours[i]))  
+    }
+
+}
+abline(h = 0)
+
+for (i in 1:10) {
+    PACF <- pacf(y[i,],main="ACF",plot = FALSE) 
+    if (i == 1) {
+    plot(PACF$lag,PACF$acf,type="h",col=toString(colours[i]),xlab="lag",ylab="PACF")
+    }
+    else {
+    lines(PACF$lag,PACF$acf,type="h",col=toString(colours[i]))  
+    }
+
+}
+abline(h = 0)
