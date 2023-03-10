@@ -47,10 +47,21 @@ abline(h = 0)
 
 #theoritical ACF
 fun_acf <- function(k) {
-    if (k == 1) {
-        return(1)
+    if (k == 0) {
+        return(1) 
+    }
+    if (k == 1 | k == 2) {
+        return(20/21)
+    }
+    else {
+        return(0.8*fun_acf(k-1))
     }
 }
+
+lines(c(0:23),lapply(c(0:23),fun_acf),col="blue",lty=3)
+legend("topright",legend=c("Confidence","Theoritcal ACF"),
+       col=c("black","blue"),lty = 2:3, cex=0.8)
+
 
 
 for (i in 1:10) {
