@@ -1,8 +1,8 @@
 #simulering 
 p <- 2 # AR order
-q <- 3# MA order
+q <- 3 # MA order
 
-theta <- c(-0.8)
+theta <- c(-0.8) #skal måske være plus
 phi <- c(0.8,-0.5)
 
 cat("AR parameters:",round(theta,3))
@@ -38,7 +38,7 @@ for (i in 1:10) {
     }
 
 }
-#confidence intervals:
+#confidence intervals (assuming white noise):
 ci = 0.95
 abline(h=qnorm((1 + ci)/2)/sqrt(n),lty=2)
 abline(h=-qnorm((1 + ci)/2)/sqrt(n),lty=2)
