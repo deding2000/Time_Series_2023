@@ -1,5 +1,5 @@
 library(forecast)
-
+rm(list = ls())
 df <- read.table("Time_Series_2023/Assignment_2/A2_sales.txt", header = TRUE)
 plot(df$Sales)
 mu <- 2070
