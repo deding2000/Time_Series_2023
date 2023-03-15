@@ -17,7 +17,7 @@ for (i in 1:10) {
     # set.seed(i)
     ts <- arima.sim(list(ar=theta,ma=phi), n, sd=0.4)
     y[i,] <- ts[1:200]
-    t = c(1:200)
+    t = c(1:n)
     if (i == 1) {
     plot(t,y[i,],type="l",col=toString(colours[i]),xlab="t",ylab=expression(x[t]),main ="Realization of 10 ARMA(1,2) processes")
     }
@@ -30,7 +30,7 @@ for (i in 1:10) {
 #Plotting ACF
 
 for (i in 1:10) {
-    ACF <- acf(y[i,],main="ACF",plot = FALSE) 
+    ACF <- acf(y[i,],main="ACF",plot = FALSE,type="covariance") 
     if (i == 1) {
     plot(ACF$lag,ACF$acf,type="h",col=toString(colours[i]),xlab="Lag",ylab="ACF",main="ACF for 10 ARMA(1,2) processes")
     }
@@ -90,7 +90,6 @@ fun_pacf <- function(k) {
     return(tail(Phi_k,n=1))
 }
 
-fun_pacf(4)
 
 lines(c(1:23),lapply(c(1:23),fun_pacf),col="blue",lty=3)
 legend("topright",legend=c("Confidence","Theoritcal PACF"),
@@ -103,3 +102,4 @@ vars = rep(0,10)
 for (i in 1:10) {
     vars[i] <- var(y[i,])
 }
+mean(vars)

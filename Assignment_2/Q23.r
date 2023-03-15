@@ -18,7 +18,7 @@ ts4 <- arima.sim(list(ar=phi2,ma=0), n, sd=sd2)
 arima1 <- arima(ts1[1:n],order=c(2,0,0),include.mean=FALSE)
 arima2 <- arima(ts2[1:n],order=c(2,0,0),include.mean=FALSE)
 arima3 <- arima(ts3[1:n],order=c(2,0,0),include.mean=FALSE)
-arima4 <- arima(ts4[1:n],order=c(2,0,0),include.mean=TRUE)
+arima4 <- arima(ts4[1:n],order=c(2,0,0),include.mean=FALSE)
 # phi_2 values
 p1[i,1] <- -arima1$coef[2]
 p2[i,1] <- -arima2$coef[2]
@@ -37,32 +37,37 @@ p4[i,3] <- arima4$var.coef[2,2]
 }
 
 #Histograms
+par(mfrow=c(2,2))
 hist(p1[,1],main="Process 1", breaks = 10,
-xlab=expression(phi[2]))
+xlab=expression(phi[2]),freq=FALSE)
+abline(v=quantile(p1[,1],probs=c(0.025,0.975))[1], col="blue")
+abline(v=quantile(p1[,1],probs=c(0.025,0.975))[2], col="blue")
+
 hist(p2[,1],main="Process 2", breaks = 10,
-xlab=expression(phi[2]))
+xlab=expression(phi[2]),freq=FALSE)
+abline(v=quantile(p2[,1],probs=c(0.025,0.975))[1], col="blue")
+abline(v=quantile(p2[,1],probs=c(0.025,0.975))[2], col="blue")
+
 hist(p3[,1],main="Process 3", breaks = 10,
-xlab=expression(phi[2]))
+xlab=expression(phi[2]),freq=FALSE)
+abline(v=quantile(p3[,1],probs=c(0.025,0.975))[1], col="blue")
+abline(v=quantile(p3[,1],probs=c(0.025,0.975))[2], col="blue")
+
 hist(p4[,1],main="Process 4", breaks = 10,
-xlab=expression(phi[2]))
-arima1$var.coef[2,2]
-# 0.95 quantiles
-quantile(p1[,1],probs=c(0.025,0.975))
-quantile(p2[,1],probs=c(0.025,0.975))
-quantile(p3[,1],probs=c(0.025,0.975))
-quantile(p4[,1],probs=c(0.025,0.975))
-#assuming normal distribution of the phi2s:
-# t.test(p1[,1])$"conf.int"
-# t.test(p2[,1])$"conf.int"
-# t.test(p3[,1])$"conf.int"
-# t.test(p4[,1])$"conf.int"
+xlab=expression(phi[2]),freq=FALSE)
+abline(v=quantile(p4[,1],probs=c(0.025,0.975))[1], col="blue")
+abline(v=quantile(p4[,1],probs=c(0.025,0.975))[2], col="blue")
+
 
 #effects of different phi2
 plot(c(1:100),p1[,3])
 mean(p1[,3])
 plot(c(1:100),p2[,3])
 mean(p2[,3])
-
+var(p1[,1]
+var(p2[,1])
+var(p3[,1])
+var(p4[,1])
 
 
 #effects of different sigmas
@@ -71,11 +76,15 @@ mean(p2[,3])
 plot(c(1:100),p2[,3])
 mean(p4[,3])
 
+
+
+
 #pair of estimates
-plot(p1[,1:2])
-plot(p2[,1:2])
-plot(p3[,1:2])
-plot(p4[,1:2])
+par(mfrow=c(2,2))
+plot(p1[,1],-p1[,2],main="Process 1",xlab=expression(phi[2]),ylab=expression(phi[1]))
+plot(p2[,1],-p2[,2],main="Process 2",xlab=expression(phi[2]),ylab=expression(phi[1]))
+plot(p3[,1],-p3[,2],main="Process 3",xlab=expression(phi[2]),ylab=expression(phi[1]))
+plot(p4[,1],-p4[,2],main="Process 4",xlab=expression(phi[2]),ylab=expression(phi[1]))
 
 
 
