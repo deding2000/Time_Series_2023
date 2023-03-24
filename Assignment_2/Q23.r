@@ -42,42 +42,37 @@ hist(p1[,1],main="Process 1", breaks = 10,
 xlab=expression(phi[2]),freq=FALSE)
 abline(v=quantile(p1[,1],probs=c(0.025,0.975))[1], col="blue")
 abline(v=quantile(p1[,1],probs=c(0.025,0.975))[2], col="blue")
+abline(v=mean(p1[,1]),col="black",lty=2)
 
 hist(p2[,1],main="Process 2", breaks = 10,
 xlab=expression(phi[2]),freq=FALSE)
 abline(v=quantile(p2[,1],probs=c(0.025,0.975))[1], col="blue")
 abline(v=quantile(p2[,1],probs=c(0.025,0.975))[2], col="blue")
+abline(v=mean(p2[,1]),col="black",lty=2)
 
 hist(p3[,1],main="Process 3", breaks = 10,
 xlab=expression(phi[2]),freq=FALSE)
 abline(v=quantile(p3[,1],probs=c(0.025,0.975))[1], col="blue")
 abline(v=quantile(p3[,1],probs=c(0.025,0.975))[2], col="blue")
+abline(v=mean(p3[,1]),col="black",lty=2)
 
 hist(p4[,1],main="Process 4", breaks = 10,
 xlab=expression(phi[2]),freq=FALSE)
 abline(v=quantile(p4[,1],probs=c(0.025,0.975))[1], col="blue")
 abline(v=quantile(p4[,1],probs=c(0.025,0.975))[2], col="blue")
+abline(v=mean(p4[,1]),col="black",lty=2)
 
+#effects of different phi2 and sigmas:
 
-#effects of different phi2
-plot(c(1:100),p1[,3])
-mean(p1[,3])
-plot(c(1:100),p2[,3])
-mean(p2[,3])
-var(p1[,1]
+var(p1[,1])
 var(p2[,1])
 var(p3[,1])
 var(p4[,1])
 
-
-#effects of different sigmas
-plot(c(1:100),p1[,3])
-mean(p2[,3])
-plot(c(1:100),p2[,3])
-mean(p4[,3])
-
-
-
+mean(p1[,1])
+mean(p2[,1])
+mean(p3[,1])
+mean(p4[,1])
 
 #pair of estimates
 par(mfrow=c(2,2))
@@ -85,6 +80,3 @@ plot(p1[,1],-p1[,2],main="Process 1",xlab=expression(phi[2]),ylab=expression(phi
 plot(p2[,1],-p2[,2],main="Process 2",xlab=expression(phi[2]),ylab=expression(phi[1]))
 plot(p3[,1],-p3[,2],main="Process 3",xlab=expression(phi[2]),ylab=expression(phi[1]))
 plot(p4[,1],-p4[,2],main="Process 4",xlab=expression(phi[2]),ylab=expression(phi[1]))
-
-
-
