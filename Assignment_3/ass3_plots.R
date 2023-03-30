@@ -17,9 +17,8 @@ lines(inflation,type='l',col="darkgreen",lwd="2")
 mtext("Interest Rate",side=4,line=2) 
 mtext("Inflation /",side=4,line=1) 
 axis(4, ylim=c(0,7000),las=1)
-legend("top", legend = c("pricesDK", "Inflation Rate","Interest Rate"),
+legend("top", legend = c("pricesDK","Interest Rate", "Inflation Rate"),
        lwd = 3, col = c("red","blue", "darkgreen"))
-
 
 #Alternative plot
 par(mfrow=c(4,1))
@@ -27,17 +26,6 @@ plot(pricesDK,type="o",col="red",lwd="2",xlab="Quarters")
 plot(diff(pricesDK),type="o",col="red",lwd="2",xlab="Quarters")
 plot(interest,type='l',col="blue", lwd="2")
 plot(inflation,type='l',col="darkgreen",lwd="2")
-
-par(new=TRUE)
-plot(interest,type='l',col="blue", axes=FALSE,xlab="", ylab="",lwd="2")
-lines(inflation,type='l',col="darkgreen",lwd="2")
-mtext("Interest Rate",side=4,line=2) 
-mtext("Inflation /",side=4,line=1) 
-axis(4, ylim=c(0,7000),las=1)
-legend("top", legend = c("pricesDK", "Inflation Rate","Interest Rate"),
-       lwd = 3, col = c("red","blue", "darkgreen"))
-
-
 
 #pricesDK not stationary hence we make diff transform.
 #Save the plot!
@@ -47,7 +35,7 @@ if(saveFig == TRUE){pdf("name.pdf", width = 10*0.8, height = 10*0.8)}
 if(saveFig == TRUE){dev.off()}
 saveFig <- FALSE
 
-#Q4.1 Plot the transform
+#Q4.1 Plot the diff transform
 par(mfrow=c(1,1))
 par(mar=c(5, 4, 4, 6) + 0.1)
 plot(diff(pricesDK), main="Difference in PriceDK", type="o",col="red",lwd="2",xlab="Quarters",ylab="Difference in priceDK")
@@ -144,6 +132,14 @@ for (i in 1:4){
   }
 }
 
+#Q4.3 univariate model selection
+par(mfrow=c(1,1))
+acf(pricesDK) #Clear exponential?? more like linear
+pacf(pricesDK) #clear lag 1, hence AR(1) part.
+m1 <- arima(x=pricesDK,order=c(1,0,0))
+tsdiag(m1) #looks like seasonal 4 0 weak lag 1 mby seasonal 2
+pacf(residuals(m1))
+
 #Q4.9 Plot quarterly sales of for each of the four regions.
 Capital <- (na.omit(Data$Capital))
 Sealand <- (na.omit(Data$Sealand))
@@ -230,6 +226,7 @@ acf(dSealand) #måske seasonal på 4? lag på 14?
 acf(dMidJutland) #seasonal på 4, negativ seasonal på 2
 acf(dRural) # seasonal på 4, negativ på seasonal 2
 
+par(mfrow=c(2,2))
 pacf(dCapital) #meget lille, måske 1,2 og 11
 pacf(dSealand) #ingenting, lidt på 14?
 pacf(dMidJutland) #lidt neg 2, 4, neg6 og neg$14, måske 2 seasonal??
@@ -237,3 +234,4 @@ pacf(dRural) # seasonal på 2? i hvert fald for 2, 4, 6 og 8.
 
 
 #Find Marimax model for house prices
+
