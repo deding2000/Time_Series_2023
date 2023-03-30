@@ -1,7 +1,7 @@
 install.packages("marima")
-Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
+#Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
 #Data <-read.csv("/Users/OscarBP/Documents/5. DTU noter/Semester 6/02417 Time Series Analysis/Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
-#Data <- read.csv("A3Data.csv",header=TRUE)
+Data <- read.csv("A3Data.csv",header=TRUE)
 str(Data)
 #Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1Q1
 #Plot the quarterly average sales prices in Denmark and additional variables
@@ -152,3 +152,28 @@ sum(sign(fit8$residuals[2:length(fit8$residuals)]*fit8$residuals[1:length(fit8$r
 fit1 <- lm(log(pricesDK[1:50]) ~ interest[1:50]^2)
 plot(fit1)
 exp(diff(log()))
+
+#Q4.6
+library(mltools)
+library(data.table)
+
+set.seed(1)
+nn <- 140000
+x1 <- inflation[1:122]
+x2 <- interest[1:122]
+y  <- numeric(nn); y[1] <- 0
+eta  <- numeric(nn); eta[1] <- 0
+
+y <- pricesDK[1:122]
+
+Y <- cumsum(pricesDK)
+Y12 <- diffinv(y,12)[-(1:12)]
+Y_1_12 <-cumsum(diffinv(y,12)[-(1:12)])
+(test1 <- arima(y,order=c(1,1,0),period=2,xreg=cbind(x1,x2)))
+(test2 <- arima(Y,order=c(1,1,0),xreg=cbind(cumsum(x1),cumsum(x2))))
+(test3 <- arima(Y12,order=c(1,0,0),seasonal=list(order=c(0,1,0),period=12),xreg=cbind(diffinv(x1,12)[-(1:12)],diffinv(x2,12)[-(1:12)])))
+
+(testWRONG <- arima(Y,order=c(1,1,0),xreg=cbind(x1,x2)))
+(test4 <- arima(Y_1_12,order=c(1,1,0),seasonal=list(order=c(0,1,0),period=12),xreg=cbind(cumsum(diffinv(x1,12)[-(1:12)]),cumsum(diffinv(x2,12)[-(1:12)]))))
+
+
