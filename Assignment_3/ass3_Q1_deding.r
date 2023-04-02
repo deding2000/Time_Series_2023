@@ -1,5 +1,6 @@
 library(forecast)
 library("plotrix")  
+library("marima")
 Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
 N <- 122
 pricesDK <- na.omit(Data$Denmark)
@@ -8,9 +9,11 @@ Rural <- na.omit(Data$Rural)
 Sealand <- na.omit(Data$Sealand)
 Mitjut <- na.omit(Data$MidJutland)
 
-interest <- na.omit(Data$InterestRate)
-inflation <- na.omit(Data$InflationRate)
+Interest <- na.omit(Data$InterestRate)
+Inflation <- na.omit(Data$InflationRate)
 
+plot(diff(sqrt(Interest)))
+plot(log(inflation))
 plot(diff(log(pricesDK)))
 plot(log(pricesDK))
 plot(diff(CPH))
@@ -19,11 +22,22 @@ plot(Sealand)
 plot(Mitjut)
 plot((diff(interest)))
 plot(inflation)
-
 acf(diff(interest)))
 plot(acf(inflation))
 acf(diff(pricesDK))
 pacf(diff(pricesDK))
+
+# for marima
+acf((diff(log(CPH))))
+acf((diff(log(Sealand))))
+acf((diff(log(Mitjut))))
+acf((diff(log(Rural))))
+pacf((diff(log(CPH))))
+pacf((diff(log(Sealand))))
+pacf((diff(log(Mitjut))))
+pacf((diff(log(Rural))))
+
+
 
 #initial guess is an (0,1,0)-(2,0,3) season 2 model
 # but ended up with a (1,1,0)-(1,1,1) season 2 model
@@ -104,3 +118,42 @@ plotCI(x = c(123:128),
        li = exp(lower2),
        ui = exp(upper2),col = "red",xlim = c(1,128),ylim = c(500,3000))
 lines(exp(predictions_6_new$x))
+
+## Marima time
+
+
+rural <- define.dif(log(Rural),difference=c(1,1))$dif.series
+mitjut <- define.dif(log(Mitjut),difference=c(1,1))$dif.series
+cph <- define.dif(log(CPH),difference=c(1,1))$dif.series
+sealand <- define.dif(log(Sealand),difference=c(1,1))$dif.series
+interest <- define.dif(sqrt(Interest),difference=c(1,1))$dif.series
+inflation <- Inflation
+mdata <- data.frame(t(cph),t(sealand),t(mitjut),t(rural),interest[1:122],inflation[1:122])
+
+# estimated from acf and pacf plots
+ar <- c(1)
+ma <- c(2)
+# right now CPH is not depending on the other regions
+Model1 <- define.model(kvar=6, ar=ar, ma=ma, indep=c(5:6),no.dep=c(1,2,1,3,1,4))#no.dep=c(1,2,1,3,1,4))
+Marima1 <- marima(mdata,means=1,
+                  ar.pattern=Model1$ar.pattern, ma.pattern=Model1$ma.pattern,
+                  Check=FALSE, Plot="none", penalty=1)
+
+short.form(Marima1$ar.estimates, leading=FALSE) # print estimates
+short.form(Marima1$ma.estimates, leading=FALSE)
+
+Marima1$one.step
+residuals <- Marima1$residuals
+# kig på variabel x
+x <- 5
+res <- na.omit(residuals[1:122])
+plot(res)
+qqnorm(res)
+qqline(res)
+hist(res)
+# sign test
+sum(abs(diff(res>0)))
+# lower bound
+N <- 121 #?
+low <- (N-1)/2 - 2*sqrt((N-1)/4)
+high <- (N-1)/2 + 2*sqrt((N-1)/4)
