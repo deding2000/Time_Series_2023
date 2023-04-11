@@ -1,4 +1,12 @@
+library(mltools)
+library(data.table)
+library(marima)
+library(forecast)
+library("plotrix")  
+library("marima")
+library(car)
 rm(list = ls())
+
 #Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
 Data <- read.csv("A3Data.csv",header=TRUE)
 Denmark <- na.omit(Data$Denmark)
@@ -418,8 +426,12 @@ length(dlm2$coef)
 length(dlm2$coef)
 #Efterfølgende:
 
-dlm2BEST_SIMPLE
-dlm2_BEST_COMPLEX
+(dlm2BEST_SIMPLE <- arima(x=log(Denmark),order=c(1,1,1), seasonal = list(order = c(1,0,1), period = 4)))#288.49,  aic = -533.49
+
+dlm2BEST_SIMPLE$aic
+
+tsdiag(dlm2BEST_SIMPLE)
+
 #PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS
 #PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS
 #PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS#PLOTS
@@ -442,15 +454,15 @@ plot(density(residuals(final_reduced_mod)))
 #SAVING:::
 ############################################################################################################################################
 saveFig <- TRUE
-if(saveFig == TRUE){pdf("Q4.4RESIDUALS.pdf", width = 10*0.8, height = 15*0.8)}
-par(mfrow=c(2,2))
-final_reduced_mod
+if(saveFig == TRUE){pdf("Q4.4ACF_PACF_RESIDUALS.pdf", width = 10*0.8, height = 5*0.8)}
+par(mfrow=c(1,2))
+#final_reduced_mod
 #tsdiag(final_reduced_mod) #Standardized residuals, ACF of residuals and p-values
-plot(residuals(final_reduced_mod),type="p",xlab="Quarters")
-lines(cbind(1:122,0),type="l")
-acf(residuals(final_reduced_mod))
-Pacf(residuals(final_reduced_mod))
-plot(density(residuals(final_reduced_mod)))
+#plot(residuals(final_reduced_mod),type="p",xlab="Quarters")
+#lines(cbind(1:122,0),type="l")
+acf(residuals(final_reduced_mod),main="ACF residuals")
+Pacf(residuals(final_reduced_mod),main="PACF residuals")
+#plot(density(residuals(final_reduced_mod)))
 if(saveFig == TRUE){dev.off()}
 saveFig <- FALSE
 
@@ -502,24 +514,40 @@ make_table#make table
 #SAVING:::
 ############################################################################################################################################
 #Kan måske samles
+plot(density(residuals(final_reduced_mod)))
+final_reduced_mod
+tsdiag(final_reduced_mod) #Standardized residuals, ACF of residuals and p-values
+plot(residuals(final_reduced_mod),type="p",xlab="Quarters")
+lines(cbind(1:122,0),type="l")
+plot(res,xlab="Quarters")
+acf(residuals(final_reduced_mod))
+Pacf(residuals(final_reduced_mod))
+plot(density(residuals(final_reduced_mod)))
+
 saveFig <- TRUE
-if(saveFig == TRUE){pdf("Q4.4_QQplot.pdf", width = 10*0.8, height = 7*0.8)}
-qqPlot(residuals(final_reduced_mod))
+if(saveFig == TRUE){pdf("Q4.4RESIDUALS.pdf", width = 10*0.8, height = 7*0.8)}
+par(mfrow=c(2,2))
+plot(residuals(final_reduced_mod),type="p",xlab="Quarters",ylab="residuals",main="residual plot")
+lines(cbind(1:122,0),type="l")
+qqPlot(residuals(final_reduced_mod),ylab="residuals",main="QQplot")
+hist(res,xlab="residuals")
+plot(density(residuals(final_reduced_mod)),main="Density of residuals")
 if(saveFig == TRUE){dev.off()}
 saveFig <- FALSE
 
-saveFig <- TRUE
-if(saveFig == TRUE){pdf("Q4.4_Residual_Histogram.pdf", width = 10*0.8, height = 7*0.8)}
-hist(res)
-if(saveFig == TRUE){dev.off()}
-saveFig <- FALSE
+#saveFig <- TRUE
+#if(saveFig == TRUE){pdf("Q4.4_Residual_Histogram.pdf", width = 10*0.8, height = 7*0.8)}
+#hist(res)
+
+#if(saveFig == TRUE){dev.off()}
+#saveFig <- FALSE
 
 
-saveFig <- TRUE
-if(saveFig == TRUE){pdf("Q4.4_Residuals.pdf", width = 10*0.8, height = 7*0.8)}
-plot(res)
-if(saveFig == TRUE){dev.off()}
-saveFig <- FALSE
+#saveFig <- TRUE
+#if(saveFig == TRUE){pdf("Q4.4_Residuals.pdf", width = 10*0.8, height = 7*0.8)}
+#plot(res)
+#if(saveFig == TRUE){dev.off()}
+#saveFig <- FALSE
 
 #PLOTSPLOTSPLOTSPLOTSPLOTSPLOTSPLOTSPLOTSPLOTSPLOTSPLOTSPLOTS
 ############################################################################################################################################
@@ -527,6 +555,7 @@ saveFig <- FALSE
 
 ###########################################################################
 #Q4.5 plots
+par(mfrow=c(1,1))
 model <- final_reduced_mod
 predictions_6 <-forecast(model,6,95)
 preds <- predictions_6$mean
@@ -564,7 +593,7 @@ if(saveFig == TRUE){pdf("Q4.5_PredictionsSmallInterval.pdf", width = 10*0.8, hei
 plotCI(x = c(123:128), 
        y = exp(preds[1:6]),
        li = exp(lower),
-       ui = exp(upper),col = "red",xlim = c(100,128),ylim = c(500,3000),
+       ui = exp(upper),col = "red",xlim = c(100,128),ylim = c(1900,3000),
        xlab="Quarters",ylab="Housing Prices")
 lines(exp(predictions_6$x))
 if(saveFig == TRUE){dev.off()}
@@ -577,7 +606,7 @@ saveFig <- FALSE
 x_inflation <- cumsum(InflationRate)
 x_interest <- InterestRate
 x_inf_new <- cumsum(c(InflationRate[1:124],rep(InflationRate[124],4)))
-(new_model <- Arima(log(Denmark),xreg = c((x_inflation[1:122])),order=c(1,1,0), seasonal = list(order = c(1,1,1), period = 2)))
+#(new_model <- Arima(log(Denmark),xreg = c((x_inflation[1:122])),order=c(1,1,0), seasonal = list(order = c(1,1,1), period = 2)))
 (new_model <- Arima(log(Denmark),xreg = c((x_inflation[1:122])),order=c(1,1,0), seasonal = list(order = c(1,0,1), period = 4)))
 #residuals
 res2 <- new_model$residuals
@@ -601,6 +630,33 @@ high <- (N-1)/2 + 2*sqrt((N-1)/4)
 make_table=data.frame(Sign_Test=signtest,Low=low,High=high) 
 make_table#make table
 
+final_reduced_mod <- 
+#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING
+saveFig <- TRUE
+if(saveFig == TRUE){pdf("Q4.6RESIDUALS.pdf", width = 10*0.8, height = 7*0.8)}
+par(mfrow=c(2,2))
+plot(residuals(new_model),type="p",xlab="Quarters",ylab="residuals",main="residual plot")
+lines(cbind(1:122,0),type="l")
+qqPlot(residuals(new_model),ylab="residuals",main="QQplot")
+hist(res,xlab="residuals")
+plot(density(residuals(new_model)),main="Density of residuals")
+if(saveFig == TRUE){dev.off()}
+saveFig <- FALSE
+
+saveFig <- TRUE
+if(saveFig == TRUE){pdf("Q4.6ACF_PACF_RESIDUALS.pdf", width = 10*0.8, height = 4*0.8)}
+par(mfrow=c(1,2))
+#final_reduced_mod
+#tsdiag(final_reduced_mod) #Standardized residuals, ACF of residuals and p-values
+#plot(residuals(final_reduced_mod),type="p",xlab="Quarters")
+#lines(cbind(1:122,0),type="l")
+acf(residuals(new_model))
+Pacf(residuals(new_model))
+#plot(density(residuals(final_reduced_mod)))
+if(saveFig == TRUE){dev.off()}
+saveFig <- FALSE
+
+#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING#SAVING
 
 ###########################################################################
 #Q4.7 Forecasting the future house prices - II
