@@ -1,4 +1,7 @@
 install.packages("marima")
+library(mltools)
+library(data.table)
+library(marima)
 #Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
 #Data <-read.csv("/Users/OscarBP/Documents/5. DTU noter/Semester 6/02417 Time Series Analysis/Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
 Data <- read.csv("A3Data.csv",header=TRUE)
