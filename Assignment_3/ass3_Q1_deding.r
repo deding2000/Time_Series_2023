@@ -1,33 +1,38 @@
 library(forecast)
 library("plotrix")  
 library("marima")
-Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
-N <- 122
-pricesDK <- na.omit(Data$Denmark)
-CPH <- na.omit(Data$Capital)
-Rural <- na.omit(Data$Rural)
-Sealand <- na.omit(Data$Sealand)
-Mitjut <- na.omit(Data$MidJutland)
+source("Time_Series_2023/Assignment_3/res_plot_fnc.r") # for residual checking
+source("Time_Series_2023/Assignment_3/data_loading.r") # loading data
+###################################################################
+# Q41 loading data and plotting
 
-Interest <- na.omit(Data$InterestRate)
-Inflation <- na.omit(Data$InflationRate)
+# Average House Prices
+par(mfrow=c(3,1))
+plot(Years[1:N_prices],pricesDK, type = "l",col="red",main="Average DK house prices",xlab = "Year",ylab ="Sales price per sqm") # does not look stationary so we use the difference
+plot(Years[2:N_prices],diff(pricesDK), type = "l",col="red",main="Average DK house prices (differenced)",xlab = "Year",ylab ="Sales price per sqm") # looks better but growing variance
+plot(Years[2:N_prices],diff(log(pricesDK)), type = "l",col="red",main="Average DK house prices (log transformed and then differenced)",xlab = "Year",ylab ="Sales price per sqm") # looks good
 
-plot(diff(sqrt(Interest)))
-plot(log(inflation))
-plot(diff(log(pricesDK)))
-plot(log(pricesDK))
-plot(diff(CPH))
-plot(Rural)
-plot(Sealand)
-plot(Mitjut)
-plot((diff(interest)))
-plot(inflation)
-acf(diff(interest)))
-plot(acf(inflation))
+# interest rates
+par(mfrow=c(2,1))
+plot(Years[1:N_int],Interest,type = "l",col = "blue", main="Danish interest rate",xlab = "Year", ylab="Interest Rate") #does not look stationary (or even stochastic)
+plot(Years[2:N_int],diff(Interest),type = "l",col = "blue", main="Danish interest rate (differenced)",xlab = "Year", ylab="Interest Rate") # looks better
+
+# Inflation
+par(mfrow = c(1,1))
+plot(Years[1:N_inf],Inflation,type="l",col="green",main="Danish inflation rate",xlab = "Year",ylab="Inflation rate") # looks rather stationary
+
+#########################################################################3
+# Q42 acf, pacf for housing prices
+
+par(mfrow = c(3,2))
+acf(pricesDK)
+pacf(pricesDK)
 acf(diff(pricesDK))
 pacf(diff(pricesDK))
+acf(diff(log(pricesDK)))
+pacf(diff(log(pricesDK)))
 
-# for marima
+# cross correlation functions
 acf((diff(log(CPH))))
 acf((diff(log(Sealand))))
 acf((diff(log(Mitjut))))
@@ -37,34 +42,6 @@ pacf((diff(log(Sealand))))
 pacf((diff(log(Mitjut))))
 pacf((diff(log(Rural))))
 
-
-
-#initial guess is an (0,1,0)-(2,0,3) season 2 model
-# but ended up with a (1,1,0)-(1,1,1) season 2 model
-model <- arima(log(pricesDK),order=c(1,1,0), seasonal = list(order = c(1,1,1), period = 2))
-
-#residuals
-res <- model$residuals
-plot(res)
-acf(res)
-pacf(res)
-qqnorm(res)
-qqline(res)
-hist(res)
-
-#sign test
-sum(abs(diff(res>0)))
-# lower bound
-low <- (N-1)/2 - 2*sqrt((N-1)/4)
-high <- (N-1)/2 + 2*sqrt((N-1)/4)
-
-acf(diff(CPH))
-pacf(diff(CPH))
-
-plot(pacf(exp(interest)))
-plot(pacf(inflation))
-plot(pacf(diff(pricesDK)))
-
 # cross correlation
 ccf(diff(CPH),diff(Rural),type="correlation")
 ccf(diff(CPH),diff(Sealand),type="correlation")
@@ -72,88 +49,81 @@ ccf(diff(CPH),diff(Mitjut),type="correlation")
 ccf(diff(Rural),diff(Sealand),type="correlation")
 ccf(diff(Rural),diff(Mitjut),type="correlation")
 
+##########################################################3
+# Q43
+#initial guess is an (0,1,0)-(2,0,3) season 2 model
+# but ended up with a (1,1,0)-(1,0,1) season 4 model
+model <- arima(log(pricesDK),order=c(1,1,0), seasonal = list(order = c(1,0,1), period = 4))
+# Compare with auto.arima
+auto.arima(log(pricesDK))
+
+#####################################################################3
+#Q44
+#residuals
+residual_plots(model$residuals)
+
+###########################################################################3
+#Q45
 #prediction (6 time steps ahead)
 predictions_6 <-forecast(model,6,95)
 preds <- predictions_6$mean
 lower <- predictions_6$lower
 upper <- predictions_6$upper
-plotCI(x = c(123:128), 
+par(mfrow=c(1,1))
+plotCI(x = seq(from=2022.75,to = 2024, by = 0.25), 
        y = exp(preds[1:6]),
        li = exp(lower),
-       ui = exp(upper),col = "red",xlim = c(1,128),ylim = c(500,3000))
-lines(exp(predictions_6$x))
+       ui = exp(upper),col = "red",xlim = c(1992.25,2024),ylim = c(500,3000),main="Average DK house prices with predictions",xlab = "Year",ylab ="Sales price per sqm")
+lines(Years[1:N_prices],exp(predictions_6$x))
 
+###################################################################
+#Q46
 #Arima X (interest seems useless but inflation is nice)
-x_inflation <- cumsum(inflation)
-x_interest <- interest
-x_inf_new <- cumsum(c(inflation[1:124],rep(inflation[124],4)))
-new_model <- Arima(log(pricesDK),xreg = c((x_inflation[1:122])),order=c(1,1,0), seasonal = list(order = c(1,1,1), period = 2))
+x_inf_new <- cumsum(c(Inflation[1:124],rep(Inflation[124],4)))
+new_model <- Arima(log(pricesDK),xreg = cbind(Inflation=x_inf_new[1:122]),order=c(1,1,0), seasonal = list(order = c(1,0,1), period = 4))
 #residuals
-res2 <- new_model$residuals
-plot(res2)
-acf(res2)
-pacf(res2)
-qqnorm(res2)
-qqline(res2)
-hist(res2)
+residual_plots(new_model$residuals)
 
-sum(abs(diff(res2>0)))
-# lower bound
-low <- (N-1)/2 - 2*sqrt((N-1)/4)
-high <- (N-1)/2 + 2*sqrt((N-1)/4)
-
+#############################################################################
+#Q47
 #forecast
-rep(inflation[124],4)
-plot(c(inflation[1:124],rep(inflation[124],4)))
-x_inf_new <- cumsum(c(inflation[1:124],rep(inflation[124],4)))
-plot(diff(x_inf_new))
-plot(inflation)
-predictions_6_new <-forecast(new_model,level=95,xreg=x_inf_new[123:128])
-
+predictions_6_new <-forecast(new_model,level=95,xreg=cbind(Inflation=x_inf_new[123:128]))
 preds2 <- predictions_6_new$mean
 lower2 <- predictions_6_new$lower
 upper2 <- predictions_6_new$upper
-plotCI(x = c(123:128), 
+par(mfrow=c(1,1))
+plotCI(x = seq(from=2022.75,to = 2024, by = 0.25), 
        y = exp(preds2[1:6]),
        li = exp(lower2),
-       ui = exp(upper2),col = "red",xlim = c(1,128),ylim = c(500,3000))
-lines(exp(predictions_6_new$x))
+       ui = exp(upper2),col = "red",xlim = c(1992.25,2024),ylim = c(500,3000),main="Average DK house prices with ARIMAX predictions",xlab = "Year",ylab ="Sales price per sqm")
+lines(Years[1:N_prices],exp(predictions_6_new$x))
 
-## Marima time
+############################################################################3
+#Q48
+#Testing ARIMA model
+nt <- 6
+new_model_train <- arima(log(pricesDK[1:(122-nt)]),order=c(1,1,0), seasonal = list(order = c(1,0,1), period = 4))
+predictions_6_train <-forecast(new_model_train,nt,level=95)#xreg=cbind(Inflation=x_inf_new[117:122]))
+predst <- predictions_6_train$mean
+lowert <- predictions_6_train$lower
+uppert <- predictions_6_train$upper
+par(mfrow=c(1,1))
+plotCI(x = seq(from = (2022.75-0.25*(nt-1)), to = 2022.75, by = 0.25), 
+       y = (predst[1:nt]),
+       li = (lowert),
+       ui = (uppert),col = "red",ylim=c(7.5,8.2),main="Average DK house prices with ARIMA predictions (Training)",xlab = "Year",ylab ="Sales price per sqm")
+lines(Years[(N_prices-(nt-1)):N_prices],log(pricesDK[(N_prices-(nt-1)):N_prices]))
+points(Years[(N_prices-(nt-1)):N_prices],log(pricesDK[(N_prices-(nt-1)):N_prices]))
 
-
-rural <- define.dif(log(Rural),difference=c(1,1))$dif.series
-mitjut <- define.dif(log(Mitjut),difference=c(1,1))$dif.series
-cph <- define.dif(log(CPH),difference=c(1,1))$dif.series
-sealand <- define.dif(log(Sealand),difference=c(1,1))$dif.series
-interest <- define.dif(sqrt(Interest),difference=c(1,1))$dif.series
-inflation <- Inflation
-mdata <- data.frame(t(cph),t(sealand),t(mitjut),t(rural),interest[1:122],inflation[1:122])
-
-# estimated from acf and pacf plots
-ar <- c(1)
-ma <- c(2)
-# right now CPH is not depending on the other regions
-Model1 <- define.model(kvar=6, ar=ar, ma=ma, indep=c(5:6),no.dep=c(1,2,1,3,1,4))#no.dep=c(1,2,1,3,1,4))
-Marima1 <- marima(mdata,means=1,
-                  ar.pattern=Model1$ar.pattern, ma.pattern=Model1$ma.pattern,
-                  Check=FALSE, Plot="none", penalty=1)
-
-short.form(Marima1$ar.estimates, leading=FALSE) # print estimates
-short.form(Marima1$ma.estimates, leading=FALSE)
-
-Marima1$one.step
-residuals <- Marima1$residuals
-# kig på variabel x
-x <- 5
-res <- na.omit(residuals[1:122])
-plot(res)
-qqnorm(res)
-qqline(res)
-hist(res)
-# sign test
-sum(abs(diff(res>0)))
-# lower bound
-N <- 121 #?
-low <- (N-1)/2 - 2*sqrt((N-1)/4)
-high <- (N-1)/2 + 2*sqrt((N-1)/4)
+#Testing ARIMAX model
+new_model_train <- Arima(log(pricesDK[1:(122-nt)]),xreg = cbind(Inflation=x_inf_new[1:116]),order=c(1,1,0), seasonal = list(order = c(1,0,1), period = 4))
+predictions_6_train <-forecast(new_model_train,nt,level=95,xreg=cbind(Inflation=x_inf_new[117:122]))
+predst <- predictions_6_train$mean
+lowert <- predictions_6_train$lower
+uppert <- predictions_6_train$upper
+plotCI(x = seq(from = (2022.75-0.25*(nt-1)), to = 2022.75, by = 0.25), 
+       y = (predst[1:nt]),
+       li = (lowert),
+       ui = (uppert),col = "red",ylim=c(7.5,8.2),main="Average DK house prices with ARIMAX predictions (Training)",xlab = "Year",ylab ="Sales price per sqm")
+lines(Years[(N_prices-(nt-1)):N_prices],log(pricesDK[(N_prices-(nt-1)):N_prices]))
+points(Years[(N_prices-(nt-1)):N_prices],log(pricesDK[(N_prices-(nt-1)):N_prices]))
