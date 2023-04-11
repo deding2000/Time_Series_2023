@@ -177,3 +177,210 @@ Y_1_12 <-cumsum(diffinv(y,12)[-(1:12)])
 (test4 <- arima(Y_1_12,order=c(1,1,0),seasonal=list(order=c(0,1,0),period=12),xreg=cbind(cumsum(diffinv(x1,12)[-(1:12)]),cumsum(diffinv(x2,12)[-(1:12)]))))
 
 
+
+
+
+#########
+
+model_loglik<-c()
+model_aic<-c()
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,1,2),,seasonal = list(order = c(1,0,0), period = 4))
+model_loglik[1]<-ldm1_1$loglik
+model_aic[1]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,2),,seasonal = list(order = c(1,0,0), period = 4))
+model_loglik[2]<-ldm1_1$loglik
+model_aic[2]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(3,1,4),,seasonal = list(order = c(1,0,0), period = 4))
+model_loglik[3]<-ldm1_1$loglik
+model_aic[3]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(1,0,0), period = 4))
+model_loglik[4]<-ldm1_1$loglik
+model_aic[4]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[5]<-ldm1_1$loglik
+model_aic[5]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,1,2),,seasonal = list(order = c(2,0,3), period = 4))
+model_loglik[6]<-ldm1_1$loglik
+model_aic[6]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(3,1,2),,seasonal = list(order = c(1,0,1), period = 2))
+model_loglik[7]<-ldm1_1$loglik
+model_aic[7]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(9,1,2),,seasonal = list(order = c(1,0,0), period = 4))
+model_loglik[8]<-ldm1_1$loglik
+model_aic[8]<-ldm1_1$aic
+
+model_loglik #5 is best
+model_aic #5 is best!!
+
+#2. run
+model_loglik<-c()
+model_aic<-c()
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[1]<-ldm1_1$loglik
+model_aic[1]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(3,1,3),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[2]<-ldm1_1$loglik
+model_aic[2]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,1,3),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[3]<-ldm1_1$loglik
+model_aic[3]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,2),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[4]<-ldm1_1$loglik
+model_aic[4]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,4),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[5]<-ldm1_1$loglik
+model_aic[5]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(2,0,2), period = 4))
+model_loglik[6]<-ldm1_1$loglik
+model_aic[6]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(4,0,2), period = 4))
+model_loglik[7]<-ldm1_1$loglik
+model_aic[7]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,1), period = 4))
+model_loglik[8]<-ldm1_1$loglik
+model_aic[8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,3), period = 4))
+model_loglik[8]<-ldm1_1$loglik
+model_aic[8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,2), period = 2))
+model_loglik[1+8]<-ldm1_1$loglik
+model_aic[1+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(3,1,3),,seasonal = list(order = c(3,0,2), period = 2))
+model_loglik[2+8]<-ldm1_1$loglik
+model_aic[2+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,1,3),,seasonal = list(order = c(3,0,2), period = 2))
+model_loglik[3+8]<-ldm1_1$loglik
+model_aic[3+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,2),,seasonal = list(order = c(3,0,2), period = 2))
+model_loglik[4+8]<-ldm1_1$loglik
+model_aic[4+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,4),,seasonal = list(order = c(3,0,2), period = 2))
+model_loglik[5+8]<-ldm1_1$loglik
+model_aic[5+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(2,0,2), period = 2))
+model_loglik[6+8]<-ldm1_1$loglik
+model_aic[6+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(4,0,2), period = 2))
+model_loglik[7+8]<-ldm1_1$loglik
+model_aic[7+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,1), period = 2))
+model_loglik[8+8]<-ldm1_1$loglik
+model_aic[8+8]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(3,0,3), period = 2))
+model_loglik[8+8]<-ldm1_1$loglik
+model_aic[8+8]<-ldm1_1$aic
+
+model_loglik
+max(model_loglik) #5  and 2
+
+model_aic
+min(model_aic) #6 #11
+
+
+model_loglik<-c()
+model_aic<-c()
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,4),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[1]<-ldm1_1$loglik
+model_aic[1]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(3,1,3),,seasonal = list(order = c(3,0,2), period = 4))
+model_loglik[2]<-ldm1_1$loglik
+model_aic[2]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,1,3),,seasonal = list(order = c(2,0,2), period = 4))
+model_loglik[3]<-ldm1_1$loglik
+model_aic[3]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,1,3),,seasonal = list(order = c(3,0,2), period = 2))
+model_loglik[4]<-ldm1_1$loglik
+model_aic[4]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,1,0),,seasonal = list(order = c(1,1,1), period = 2))
+model_loglik[5]<-ldm1_1$loglik
+model_aic[5]<-ldm1_1$aic
+
+model_loglik
+max(model_loglik) #5  and 2
+
+model_aic
+min(model_aic) #6 #11
+
+
+
+
+
+
+
+
+
+
+
+model_loglik<-c()
+model_aic<-c()
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(1,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[1]<-ldm1_1$loglik
+model_aic[1]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(2,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[2]<-ldm1_1$loglik
+model_aic[2]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(3,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[3]<-ldm1_1$loglik
+model_aic[3]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(4,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[4]<-ldm1_1$loglik
+model_aic[4]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(6,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[5]<-ldm1_1$loglik
+model_aic[5]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(7,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[6]<-ldm1_1$loglik
+model_aic[6]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(8,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[7]<-ldm1_1$loglik
+model_aic[7]<-ldm1_1$aic
+
+ldm1_1 <- arima(x=log(pricesDK),order=c(9,2,2),,seasonal = list(order = c(1,0,0), period = 2))
+model_loglik[8]<-ldm1_1$loglik
+model_aic[8]<-ldm1_1$aic
+
+model_loglik #6 is best 6 is nice
+model_aic #8 is best!! 6 is nice
+
+
+m3 <- arima(x=pricesDK,order=c(1,0,1),,seasonal = list(order = c(1,0,0), period = 4))
+tsdiag(m3) #looks good, but residuals are increasing. -> transform
+pacf(residuals(m3)) #looks good
+
+
