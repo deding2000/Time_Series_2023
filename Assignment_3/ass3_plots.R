@@ -426,7 +426,7 @@ length(dlm2$coef)
 length(dlm2$coef)
 #Efterfølgende:
 
-(dlm2BEST_SIMPLE <- arima(x=log(Denmark),order=c(1,1,1), seasonal = list(order = c(1,0,1), period = 4)))#288.49,  aic = -533.49
+(dlm2BEST_SIMPLE <- arima(x=log(Denmark),order=c(1,1,0), seasonal = list(order = c(1,0,1), period = 4)))#288.49,  aic = -533.49
 
 dlm2BEST_SIMPLE$aic
 
