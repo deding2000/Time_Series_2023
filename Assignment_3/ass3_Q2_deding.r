@@ -55,8 +55,12 @@ poly <- Data_log_dif$dif.poly
 data.dif <- Data_log_dif$y.dif
 
 # Estimated from acf and pacf plots
-ar <- c(1,2)
-ma <- c(2)
+#started with 
+# ar <- c(1,2,4)
+# ma <- c(1,2)
+ar <- c(1,2,4)
+ma <- c(1,4)
+
 Model1 <- define.model(kvar=8, ar=ar, ma=ma,indep=c(8),rem.var=c(1,2,7))
 Marima1 <- marima(data.dif,means=1,
                   ar.pattern=Model1$ar.pattern, ma.pattern=Model1$ma.pattern,
@@ -66,21 +70,58 @@ short.form(Marima1$ar.estimates, leading=FALSE) # print estimates
 short.form(Marima1$ma.estimates, leading=FALSE)
 Marima1$ar.pvalues
 Marima1$ma.pvalues
-Marima1$ar.stdv
-# Look at time series number x
-# order is (quarter(1),DK(2),CPH(3),Sealand(4),Mid(5),Rural(6),Interest(7),Inflation(8))
-x <- 5
 
-#Residuals
-res <- na.omit(Marima1$residuals[x,])
-residual_plots(res)
-residual_sign_test(res)
+#Residual diagnostic:
+#Remember that the order is (quarter(1),DK(2),CPH(3),Sealand(4),Mid(5),Rural(6),Interest(7),Inflation(8))
+res_CPH <- na.omit(Marima1$residuals[3,])
+res_Sea <- na.omit(Marima1$residuals[4,])
+res_Mid <- na.omit(Marima1$residuals[5,])
+res_Rur <- na.omit(Marima1$residuals[6,])
+res_Inf <- na.omit(Marima1$residuals[8,])
+
+# Do the residual plot and sign test for each one:
+residual_plots(res_CPH)
+residual_sign_test(res_CPH)
+residual_plots(res_Sea)
+residual_sign_test(res_Sea)
+residual_plots(res_Mid)
+residual_sign_test(res_Mid)
+residual_plots(res_Rur)
+residual_sign_test(res_Rur)
+residual_plots(res_Inf)
+residual_sign_test(res_Inf)
+
+# Also check ccf between residuals for the regions
+par(mfrow=c(2,2))
+ccf(res_CPH,res_Sea)
+ccf(res_CPH,res_Mid)
+ccf(res_CPH,res_Rur)
+ccf(res_CPH,res_Inf)
+par(mfrow=c(2,2))
+ccf(res_Sea,res_Mid)
+ccf(res_Sea,res_Rur)
+ccf(res_Sea,res_Inf)
+ccf(res_Mid,res_Rur)
+par(mfrow=c(1,2))
+ccf(res_Mid,res_Inf)
+ccf(res_Rur,res_Inf)
 
 # Fitting and predicting
 MARIMA_forecast <- arma.forecast(series=ts(Data_log), marima =Marima1,nstart=122,nstep=6,dif.poly = poly)
-par(mfrow=c(2,1))
-plot(MARIMA_forecast$forecasts[x,])
-plot(log(Mitjut))
+
+# Plotting original time series together with fitted values
+par(mfrow=c(2,2))
+plot(Years[1:N_prices],CPH,main = "Capital",col="red",xlab="Year",ylab="Price pr sqm")
+lines(Years[1:128],exp(MARIMA_forecast$forecasts[3,]))
+plot(Years[1:N_prices],Sealand,main = "Sealand",col="green",xlab="Year",ylab="Price pr sqm")
+lines(Years[1:128],exp(MARIMA_forecast$forecasts[4,]))
+plot(Years[1:N_prices],Mitjut,main = "MidJutland",col="blue",xlab="Year",ylab="Price pr sqm")
+lines(Years[1:128],exp(MARIMA_forecast$forecasts[5,]))
+plot(Years[1:N_prices],Rural,main = "Rural",col="yellow",xlab="Year",ylab="Price pr sqm")
+lines(Years[1:128],exp(MARIMA_forecast$forecasts[6,]))
+
+
+
 
 
 

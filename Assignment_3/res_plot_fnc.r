@@ -13,7 +13,7 @@ residual_plots <- function(res) {
 residual_sign_test <- function(res) {
        N_res <- length(res)
        low <- (N_res-1)/2 - 2*sqrt((N_res-1)/4)
-       cat("sign test: lower bound is ", low)
+       cat("\nsign test: lower bound is ", low)
        high <- (N_res-1)/2 + 2*sqrt((N_res-1)/4)
        cat("\nsign test: upper bound is ", high)
        sign_changes <- sum(abs(diff(res>0)))
