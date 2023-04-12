@@ -3,6 +3,7 @@ library("plotrix")
 library("marima")
 library(car)
 library("LSTS")
+library("data.table")
 source("Time_Series_2023/Assignment_3/res_plot_fnc.r") # for residual checking
 source("Time_Series_2023/Assignment_3/data_loading.r") # loading data
 ###################################################################
@@ -38,9 +39,9 @@ pacf(diff(log(pricesDK)))
 pacf(Inflation)
 acf(Inflation)
 ## ARMA structure for inflation; AR(2)
-inf.struct <- c(2, 0, 0)
 ## Estimate the model (check for convergence):
-inf.fit <- arima(Inflation, order = inf.struct, include.mean = F)
+inf.fit <- arima(Inflation, order = c(2,0,0), include.mean = F)
+y.fit <- arima(log(pricesDK),order = c(2,1,0), include.mean= F)
 residual_plots(inf.fit$residuals) # seems okay
 ## Filter x and y:
 x <- Inflation[1:(N_prices)]
@@ -48,8 +49,14 @@ y <- log(pricesDK)
 inf.filt <- x - inf.fit$coef[1] * c(0, x[1:(length(x) - 1)]) - inf.fit$coef[2] * c(0, 0, x[1:(length(x) - 2)])
 prices.filt <- y - inf.fit$coef[1] * c(0, x[1:(length(x) - 1)]) - inf.fit$coef[2] * c(0, 0, x[1:(length(x) - 2)])
 ## Estimate SCCF for the filtered series:
+par(mfrow=c(1,1))
 ccf(inf.filt, prices.filt)
 print(ccf(inf.filt, prices.filt))
+# trying with residuals from ARMA model:
+Houseprices <-y.fit$residuals
+inflation <- inf.fit$residuals
+ccf(y.fit$residuals,inf.fit$residuals)
+ccf(Houseprices,inflation)
 # at lag -1 (very significant)
 ccf(inf.filt, prices.filt, plot = FALSE)[-1] #-0.41
 
