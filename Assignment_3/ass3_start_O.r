@@ -1,4 +1,4 @@
-install.packages("marima")
+#install.packages("marima")
 library(mltools)
 library(data.table)
 library(marima)
@@ -87,7 +87,7 @@ Rural <- diff(na.omit(Data$Rural))
 
 prices <- data.frame(Capital=Capital,Sealand=Sealand,MidJutland=MidJutland,Rural=Rural)
 colnames(prices) <- c("Capital","Sealand","MidJutland","Rural")
-prices
+ccf(prices)
 
 par(mfrow=c(2,3))
 for (i in 1:4){
@@ -386,4 +386,12 @@ m3 <- arima(x=pricesDK,order=c(1,0,1),,seasonal = list(order = c(1,0,0), period 
 tsdiag(m3) #looks good, but residuals are increasing. -> transform
 pacf(residuals(m3)) #looks good
 
+
+
+
+(dlm2BEST_SIMPLE <- arima(x=log(Denmark),order=c(1,1,1), seasonal = list(order = c(1,0,1), period = 4)))#288.49,  aic = -533.49
+
+dlm2BEST_SIMPLE$aic
+
+tsdiag(dlm2BEST_SIMPLE)
 
