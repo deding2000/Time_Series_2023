@@ -120,7 +120,12 @@ lines(Years[1:128],exp(MARIMA_forecast$forecasts[5,]))
 plot(Years[1:N_prices],Rural,main = "Rural",col="yellow",xlab="Year",ylab="Price pr sqm")
 lines(Years[1:128],exp(MARIMA_forecast$forecasts[6,]))
 
-
+# with prediction interval
+par(mfrow=c(1,1))
+plotCI(x = seq(from = (2024.25-0.25*(6)), to = 2024, by = 0.25), 
+       y = exp(MARIMA_forecast$forecasts[3,123:128]),
+       li = exp(MARIMA_forecast$forecasts[3,123:128]-2*sqrt(MARIMA_forecast$pred.var[3,3,])),
+       ui = exp(MARIMA_forecast$forecasts[3,123:128]+2*sqrt(MARIMA_forecast$pred.var[3,3,])),col = "red",main="Capital",xlab = "Year",ylab ="Sales price per sqm")
 
 
 
