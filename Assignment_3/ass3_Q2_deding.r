@@ -161,4 +161,43 @@ plotCI(x = seq(from = (2024.25-0.25*(6)), to = 2024, by = 0.25),
 points(Years[1:122],Rural,col="blue")
 lines(Years[1:128],exp(MARIMA_forecast$forecasts[6,]))
 
+# Zoomed in
+par(mfrow=c(2,2))
+plotCI(x = seq(from = (2024.25-0.25*(6)), to = 2024, by = 0.25), 
+       y = exp(MARIMA_forecast$forecasts[3,123:128]),
+       li = exp(MARIMA_forecast$forecasts[3,123:128]-2*sqrt(MARIMA_forecast$pred.var[3,3,])),
+       ui = exp(MARIMA_forecast$forecasts[3,123:128]+2*sqrt(MARIMA_forecast$pred.var[3,3,])), 
+       xlim = c(Years[115],2024), ylim = c(2600,4900),
+       col = "red",main="CPH fit",xlab = "Year",ylab ="Sales price per sqm")
+points(Years[115:122],CPH[115:122],col="blue")
+lines(Years[115:128],exp(MARIMA_forecast$forecasts[3,115:128]))
+
+plotCI(x = seq(from = (2024.25-0.25*(6)), to = 2024, by = 0.25), 
+       y = exp(MARIMA_forecast$forecasts[4,123:128]),
+       li = exp(MARIMA_forecast$forecasts[4,123:128]-2*sqrt(MARIMA_forecast$pred.var[4,4,])),
+       ui = exp(MARIMA_forecast$forecasts[4,123:128]+2*sqrt(MARIMA_forecast$pred.var[4,4,])), 
+       xlim = c(Years[115],2024), ylim = c(1400,2500),
+       col = "red",main="Sealand fit",xlab = "Year",ylab ="Sales price per sqm")
+points(Years[115:122],Sealand[115:122],col="blue")
+lines(Years[115:128],exp(MARIMA_forecast$forecasts[4,115:128]))
+
+plotCI(x = seq(from = (2024.25-0.25*(6)), to = 2024, by = 0.25), 
+       y = exp(MARIMA_forecast$forecasts[5,123:128]),
+       li = exp(MARIMA_forecast$forecasts[5,123:128]-2*sqrt(MARIMA_forecast$pred.var[5,5,])),
+       ui = exp(MARIMA_forecast$forecasts[5,123:128]+2*sqrt(MARIMA_forecast$pred.var[5,5,])), 
+       xlim = c(Years[115],2024), ylim = c(1500,2500),
+       col = "red",main="Mid Jutland fit",xlab = "Year",ylab ="Sales price per sqm")
+points(Years[115:122],Mitjut[115:122],col="blue")
+lines(Years[115:128],exp(MARIMA_forecast$forecasts[5,115:128]))
+
+plotCI(x = seq(from = (2024.25-0.25*(6)), to = 2024, by = 0.25), 
+       y = exp(MARIMA_forecast$forecasts[6,123:128]),
+       li = exp(MARIMA_forecast$forecasts[6,123:128]-2*sqrt(MARIMA_forecast$pred.var[6,6,])),
+       ui = exp(MARIMA_forecast$forecasts[6,123:128]+2*sqrt(MARIMA_forecast$pred.var[6,6,])), 
+       xlim = c(Years[115],2024), ylim = c(1000,2000),
+       col = "red",main="Rural fit",xlab = "Year",ylab ="Sales price per sqm")
+points(Years[115:122],Rural[115:122],col="blue")
+lines(Years[115:128],exp(MARIMA_forecast$forecasts[6,115:128]))
+
+
 

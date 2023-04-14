@@ -1,3 +1,6 @@
+# Time series Assigment 3 
+# Functions for residual diagnostics
+
 residual_plots <- function(res) {
        N_res <- length(res)
        par(mfrow=c(2,2))
