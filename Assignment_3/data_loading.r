@@ -1,3 +1,6 @@
+# Time series Assigment 3 
+# Code for data loading
+
 Data <- read.csv("Time_Series_2023/Assignment_3/A3Data.csv",header=TRUE)
 N_prices <- 122
 N_inf <- 124
