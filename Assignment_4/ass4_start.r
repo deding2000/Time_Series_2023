@@ -26,6 +26,10 @@ Xhat0 <- matrix(Salt[1])
 V0 <- matrix(0.01)
 KALMAN2 <- kalman2
 KALMAN <- kalman_rem_out(Y,A,B=NULL,u=NULL,C,Sigma.1=matrix(0.01),Sigma.2=matrix(0.005),debug=FALSE,V0=V0,Xhat0=Xhat0,n.ahead=1,skip=0,verbose=TRUE)
+# Number of Outliers
+sum(KALMAN$Outliers)
+
+
 plot(Y,type="o")
 lines(KALMAN$pred,col="red")
 points(KALMAN$rec,col="red")
