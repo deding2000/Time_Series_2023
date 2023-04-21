@@ -1,4 +1,5 @@
 source("Time_Series_2023/Assignment_4/kalman_new.r")
+source("Time_Series_2023/Assignment_4/kalman_rem_out.r")
 
 # Assignment 4
 ##########################
@@ -17,12 +18,23 @@ plot(Days,DATA$ODO,type="l",xlab="Days from start",ylab="Oxygen [mg/L]",main = "
 min(na.omit(DATA$ODO))
 
 ######################################
-# Q4.2
+# Q4.3 - Kalman Filter
 A <- matrix(1)
 Y <- Salt
 C <- matrix(1)
-Xhat0 <- Salt[1]
-V0 <- 0.01
-KALMAN <- kalman2(Y,A,B=NULL,u=NULL,C,Sigma.1=0.01,Sigma.2=0.005,debug=FALSE,V0=V0,Xhat0=Xhat0,n.ahead=1,skip=0,verbose=FALSE)
-plot(KALMAN$pred,type="l")
-lines(Y,c="red")
+Xhat0 <- matrix(Salt[1])
+V0 <- matrix(0.01)
+KALMAN2 <- kalman2
+KALMAN <- kalman_rem_out(Y,A,B=NULL,u=NULL,C,Sigma.1=matrix(0.01),Sigma.2=matrix(0.005),debug=FALSE,V0=V0,Xhat0=Xhat0,n.ahead=1,skip=0,verbose=TRUE)
+plot(Y,type="o")
+lines(KALMAN$pred,col="red")
+points(KALMAN$rec,col="red")
+# we use KALMAN$Sigma.yy.pred to do the prediction interval
+
+# standardized one step prediction errors
+pred_errors <- (KALMAN$pred[2:5000] - Y[2:5000])/(sqrt(KALMAN$Sigma.yy.pred[2:5000]))
+plot(Days[2:5000],pred_errors,type="l",xlab="Days from start",ylab="Prediction error [PSU]",main="Standardized prediction errors")
+# Zoomed in
+plot(Days[801:951],pred_errors[800:950],type="l",xlab="Days from start",ylab="Prediction error [PSU]",main="Standardized prediction errors (Zoomed in)")
+
+

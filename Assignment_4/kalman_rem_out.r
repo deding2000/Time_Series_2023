@@ -1,4 +1,4 @@
-kalman2 <- function(Y,A,B=NULL,u=NULL,C,Sigma.1=NULL,Sigma.2=NULL,debug=FALSE,V0=Sigma.1,Xhat0=NULL,n.ahead=1,skip=0,verbose=FALSE){
+kalman_rem_out <- function(Y,A,B=NULL,u=NULL,C,Sigma.1=NULL,Sigma.2=NULL,debug=FALSE,V0=Sigma.1,Xhat0=NULL,n.ahead=1,skip=0,verbose=FALSE){
 
   ## predictions through data are one-step predictions. n.ahead means
   ## how long we must keep predict after data. These are of course
@@ -60,18 +60,15 @@ kalman2 <- function(Y,A,B=NULL,u=NULL,C,Sigma.1=NULL,Sigma.2=NULL,debug=FALSE,V0
   }
 
 
-  for(tt in (skip+1):dim.Y[1]){
+  # for checking outliers
+  Outlier <- FALSE  
+
+  for(tt in (skip+1):dim.Y[1]) {
     ## (10.75) (8.75)
     K <- Sigma.xx%*%t(C)%*%solve(Sigma.yy)
     
     ## (10.73) (8.73) - reconstruction
-    # if Y[tt] is missing we set the preditions equal to the reconstruction
-    if(is.na(Y[tt,])){ 
-        X.hat <- X.hat
-        X.rec[tt,] <- X.hat
-        Sigma.xx <- Sigma.xx-K%*%C%*%Sigma.xx
-    }
-    else {
+    if(!any(is.na(Y[tt,])) & !(Outlier)){ # At first everything is thrown away if one is missing or we hace an outlier
     X.hat <- X.hat+K%*%(t(Y[tt,])-C %*% as.matrix(X.hat))
     X.rec[tt,] <- X.hat
     ## (10.74) (8.74)
@@ -98,7 +95,15 @@ kalman2 <- function(Y,A,B=NULL,u=NULL,C,Sigma.1=NULL,Sigma.2=NULL,debug=FALSE,V0
         Sigma.xx.pred[,,tt+1] <- Sigma.xx
         Sigma.yy.pred[,,tt+1] <- Sigma.yy
     }
-
+## check if next observation is an outlier
+    Outlier <- FALSE
+    if (tt < dim.Y[1]) {
+        if (!any(is.na(Y[tt+1,]))) {
+            if(abs(X.pred[tt+1,]-Y[tt+1,]) > 6*sqrt(Sigma.yy.pred[,,tt+1])) {
+        Outlier <- TRUE
+            }
+        }
+    }
   }
 
 if(n.ahead>1){
