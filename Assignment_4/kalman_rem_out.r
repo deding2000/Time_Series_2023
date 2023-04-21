@@ -62,9 +62,6 @@ kalman_rem_out <- function(Y,A,B=NULL,u=NULL,C,Sigma.1=NULL,Sigma.2=NULL,debug=F
   # for checking outliers and storing them
   Outliers <- rep(0,dim.Y[1])  
 
-  # For maximum likelihood
-  logL <- 0
-
   for(tt in (skip+1):dim.Y[1]) {
     ## (10.75) (8.75)
     K <- Sigma.xx%*%t(C)%*%solve(Sigma.yy)
@@ -100,20 +97,15 @@ kalman_rem_out <- function(Y,A,B=NULL,u=NULL,C,Sigma.1=NULL,Sigma.2=NULL,debug=F
 ## check if next observation is an outlier
     Outliers[tt+1] <- FALSE
     if (tt < dim.Y[1]) {
-        # Loglikelihood
-        #logL <- logL + log(determinant(matrix(Sigma.yy.pred[,,tt+1]))) + t(X.pred[tt+1,]-Y[tt+1,])%*%solve(matrix(Sigma.yy.pred[,,tt+1]))%*%(X.pred[tt+1,]-Y[tt+1,])
         if (!any(is.na(Y[tt+1,]))) {
             if(abs(X.pred[tt+1,]-Y[tt+1,]) > 6*sqrt(Sigma.yy.pred[,,tt+1])) {
                 Outliers[tt+1] <- TRUE
-                print("Outlier at")
-                print(tt+1)
             }
         }
     }
     
   }
 
-logL <- 0.5*logL
 
 if(n.ahead>1){
     for(tt in dim.Y[1]+(1:(n.ahead-1))){
@@ -125,7 +117,7 @@ if(n.ahead>1){
     }
   }
   if(verbose){
-      out <- list(rec=X.rec,pred=X.pred,K=K.out,Sigma.xx.rec=Sigma.xx.rec,Sigma.yy.rec=Sigma.yy.rec,Sigma.xx.pred=Sigma.xx.pred,Sigma.yy.pred=Sigma.yy.pred,Outliers=Outliers,logL=logL)
+      out <- list(rec=X.rec,pred=X.pred,K=K.out,Sigma.xx.rec=Sigma.xx.rec,Sigma.yy.rec=Sigma.yy.rec,Sigma.xx.pred=Sigma.xx.pred,Sigma.yy.pred=Sigma.yy.pred,Outliers=Outliers)
   } else {
       out <- list(rec=X.rec,pred=X.pred)
   }

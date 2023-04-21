@@ -41,4 +41,15 @@ plot(Days[2:5000],pred_errors,type="l",xlab="Days from start",ylab="Prediction e
 # Zoomed in
 plot(Days[801:951],pred_errors[800:950],type="l",xlab="Days from start",ylab="Prediction error [PSU]",main="Standardized prediction errors (Zoomed in)")
 
-
+nll <- function(Sigma){ #Sigma[1] og Sigma[2].  Sigma <- array(c(Sigma1,Sigma2),dim=c(1,1,2))
+  kl <- kalman_rem_out(Sal,A=A,B=B,u=NULL,C=C,Sigma.1=matrix(Sigma[1]),Sigma.2=matrix(Sigma[2]),debug=FALSE,V0=matrix(Sigma[1]),Xhat0=Sal[1],n.ahead=1,skip=0,verbose=TRUE)
+  #using C is single index then
+  
+  N <- length(Sal)
+  R <- na.omit( (c(C)*kl$Sigma.xx.pred[1,1,]*c(C)+c(matrix(Sigma[2])))[1:N]+0*(Sal[1:N]-kl$pred[1:N]) )
+  Y_tilde <- na.omit(Sal[1:N]-kl$pred[1:N])
+  1/2*sum(log(R)+Y_tilde*1/R*Y_tilde)
+}
+fit <- optim(c(Sigma1,Sigma2), nll,method="L-BFGS-B" , lower = 0.00005) #indsæt lower bound. #method="L-BFGS-B"
+fit$convergence
+fit
