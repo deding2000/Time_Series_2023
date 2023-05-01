@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="httpgd" width="800.00" height="600.00" viewBox="0 0 800.00 600.00">
+<defs>
+  <style type='text/css'><![CDATA[
+    .httpgd line, .httpgd polyline, .httpgd polygon, .httpgd path, .httpgd rect, .httpgd circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+<clipPath id="c0"><rect x="0.00" y="0.00" width="800.00" height="600.00"/></clipPath>
+<clipPath id="c1"><rect x="59.04" y="59.04" width="710.72" height="467.52"/></clipPath>
+<clipPath id="c2"><rect x="0.00" y="0.00" width="800.00" height="600.00"/></clipPath>
+</defs>
+<rect width="100%" height="100%" style="stroke: none;fill: #FFFFFF;"/>
+<g clip-path="url(#c0)">
+</g><g clip-path="url(#c1)">
+<polyline points="85.36,457.50 89.75,432.80 94.14,448.40 98.52,459.52 102.91,444.45 107.30,461.24 111.69,456.02 116.07,469.89 120.46,469.44 124.85,430.44 129.23,461.65 133.62,450.57 138.01,464.27 142.40,76.36 146.78,450.68 151.17,461.96 155.56,472.85 159.94,453.57 164.33,462.29 168.72,461.85 173.11,456.18 177.49,472.71 181.88,457.70 186.27,462.01 190.65,461.78 195.04,464.49 199.43,444.39 203.82,441.78 208.20,449.41 212.59,468.12 216.98,453.70 221.36,454.00 225.75,455.46 230.14,461.41 234.53,449.12 238.91,461.10 243.30,454.59 247.69,475.06 252.08,445.83 256.46,461.61 260.85,463.06 265.24,466.22 269.62,460.13 274.01,500.15 278.40,483.11 282.79,443.82 287.17,469.40 291.56,463.76 295.95,448.36 300.33,472.01 304.72,460.29 309.11,440.49 313.50,467.12 317.88,463.15 322.27,457.92 326.66,450.96 331.04,457.43 335.43,443.89 339.82,449.98 344.21,453.00 348.59,452.42 352.98,474.48 357.37,452.62 361.75,448.15 366.14,446.96 370.53,446.63 374.92,461.82 379.30,467.28 383.69,463.19 388.08,455.15 392.46,454.39 396.85,452.79 401.24,474.58 405.63,465.15 410.01,452.90 414.40,446.84 418.79,456.32 423.17,449.14 427.56,450.00 431.95,446.06 436.34,445.01 440.72,454.44 445.11,469.47 449.50,473.50 453.88,470.41 458.27,461.25 462.66,462.96 467.05,509.24 471.43,489.71 475.82,467.81 480.21,453.61 484.59,453.97 488.98,444.35 493.37,444.55 497.76,465.43 502.14,469.64 506.53,462.43 510.92,457.72 515.30,460.63 519.69,458.63 524.08,467.81 528.47,457.78 532.85,456.48 537.24,461.68 541.63,465.86 546.01,469.75 550.40,458.30 554.79,452.45 559.18,460.60 563.56,455.85 567.95,460.13 572.34,461.27 576.72,462.97 581.11,462.03 585.50,463.17 589.89,467.64 594.27,484.12 598.66,467.70 603.05,467.47 607.44,477.13 611.82,467.22 616.21,456.23 620.60,469.95 624.98,465.29 629.37,454.33 633.76,443.06 638.15,431.70 642.53,452.27 646.92,460.56 651.31,457.22 655.69,450.77 660.08,457.38 664.47,454.98 668.86,466.84 673.24,463.07 677.63,455.12 682.02,459.93 686.40,465.39 690.79,459.90 695.18,458.44 699.57,460.82 703.95,460.07 708.34,459.87 712.73,466.76 717.11,474.16 721.50,469.20 725.89,462.31 730.28,461.86 734.66,464.51 739.05,465.23 743.44,461.25" style="stroke-width: 0.75;"/>
+</g><g clip-path="url(#c2)">
+<line x1="67.81" y1="526.56" x2="699.57" y2="526.56" style="stroke-width: 0.75;"/>
+<line x1="67.81" y1="526.56" x2="67.81" y2="533.76" style="stroke-width: 0.75;"/>
+<line x1="173.11" y1="526.56" x2="173.11" y2="533.76" style="stroke-width: 0.75;"/>
+<line x1="278.40" y1="526.56" x2="278.40" y2="533.76" style="stroke-width: 0.75;"/>
+<line x1="383.69" y1="526.56" x2="383.69" y2="533.76" style="stroke-width: 0.75;"/>
+<line x1="488.98" y1="526.56" x2="488.98" y2="533.76" style="stroke-width: 0.75;"/>
+<line x1="594.27" y1="526.56" x2="594.27" y2="533.76" style="stroke-width: 0.75;"/>
+<line x1="699.57" y1="526.56" x2="699.57" y2="533.76" style="stroke-width: 0.75;"/>
+<g><text x="67.81" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">17.0</text></g>
+<g><text x="173.11" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">17.5</text></g>
+<g><text x="278.40" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">18.0</text></g>
+<g><text x="383.69" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">18.5</text></g>
+<g><text x="488.98" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">19.0</text></g>
+<g><text x="594.27" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">19.5</text></g>
+<g><text x="699.57" y="552.48" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="23.36px" lengthAdjust="spacingAndGlyphs">20.0</text></g>
+<line x1="59.04" y1="459.80" x2="59.04" y2="80.43" style="stroke-width: 0.75;"/>
+<line x1="59.04" y1="459.80" x2="51.84" y2="459.80" style="stroke-width: 0.75;"/>
+<line x1="59.04" y1="364.95" x2="51.84" y2="364.95" style="stroke-width: 0.75;"/>
+<line x1="59.04" y1="270.11" x2="51.84" y2="270.11" style="stroke-width: 0.75;"/>
+<line x1="59.04" y1="175.27" x2="51.84" y2="175.27" style="stroke-width: 0.75;"/>
+<line x1="59.04" y1="80.43" x2="51.84" y2="80.43" style="stroke-width: 0.75;"/>
+<g><text transform="translate(41.76,459.80) rotate(-90.00)" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="6.67px" lengthAdjust="spacingAndGlyphs">0</text></g>
+<g><text transform="translate(41.76,364.95) rotate(-90.00)" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="6.67px" lengthAdjust="spacingAndGlyphs">5</text></g>
+<g><text transform="translate(41.76,270.11) rotate(-90.00)" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="13.35px" lengthAdjust="spacingAndGlyphs">10</text></g>
+<g><text transform="translate(41.76,175.27) rotate(-90.00)" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="13.35px" lengthAdjust="spacingAndGlyphs">15</text></g>
+<g><text transform="translate(41.76,80.43) rotate(-90.00)" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="13.35px" lengthAdjust="spacingAndGlyphs">20</text></g>
+<polygon points="59.04,526.56 769.76,526.56 769.76,59.04 59.04,59.04" style="stroke-width: 0.75;" />
+<g><text x="414.40" y="34.67" text-anchor="middle" style="font-family: Arial;font-size: 14.40px;font-weight: bold;" textLength="339.11px" lengthAdjust="spacingAndGlyphs">Standardized prediction errors (removed outliers)</text></g>
+<g><text x="414.40" y="581.28" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="81.37px" lengthAdjust="spacingAndGlyphs">Days from start</text></g>
+<g><text transform="translate(12.96,292.80) rotate(-90.00)" text-anchor="middle" style="font-family: Arial;font-size: 12.00px;" textLength="116.72px" lengthAdjust="spacingAndGlyphs">Prediction error [PSU]</text></g>
+</g>
+</svg>
