@@ -1,10 +1,12 @@
-source("Time_Series_2023/Assignment_4/kalman(Rune).r")
-source("Time_Series_2023/Assignment_4/kalman_rem_out.r")
+#source("Time_Series_2023/Assignment_4/kalman(Rune).r")
+#source("Time_Series_2023/Assignment_4/kalman_rem_out.r")
+source("kalman(Rune).r")
+source("kalman_rem_out.r")
 
 # Assignment 4
 ##########################
 # Q4.1 Loading and Plotting
-DATA <- read.csv("Time_Series_2023/Assignment_4/A4_Kulhuse.csv")
+DATA <- read.csv("A4_Kulhuse.csv")
 Salt <- DATA$Sal
 OX <- DATA$ODO
 # missing observations
@@ -70,4 +72,33 @@ fit <- optim(c(log(Sigma1),log(Sigma2)), nll, method="L-BFGS-B")#,lower=0.005^2)
 fit$convergence
 Sigma1_opt <- exp(fit$par[1])
 Sigma2_opt <- exp(fit$par[2])
+
+kl_optim <- kalman_rem_out(Salt,A=A,B=B,u=NULL,C=C,Sigma.1=matrix(Sigma1_opt),Sigma.2=matrix(Sigma2_opt),debug=FALSE,V0=matrix(Sigma1_opt),Xhat0=Salt[1],n.ahead=1,skip=0,verbose=TRUE)
+
+Indx <- c(800:950)
+## Plotting KALMAN
+PI <- qnorm(0.025)*sqrt((kl_optim$Sigma.yy.pred[,,])[Indx])
+pred <- kl_optim$pred[Indx]
+plot(Days[Indx],Y[Indx],type="l",xlab="Days from start",ylab="Salinity [PSU]",ylim=c(min(c(rev(pred - PI), pred +PI)),max(c(rev(pred - PI), pred +PI))),main="Water salinity with Kalman filter optimal parameters")
+#polygon(Days[2:50],c(rev(2:50), 2:50), c(rev(pred - PI), pred +PI), col = "grey", border = NA)
+polygon(c(Days[Indx-1], rev(Days[Indx-1])),c(pred + PI, rev(pred - PI)), col = "gray", border = NA)
+lines(Days[Indx],Y[Indx], type = "l", col = "black")
+lines(Days[Indx],kl_optim$rec[Indx], type = "l", col = "green")
+
+
+kl_optim$rec[5000]
+kl_optim$pred[5000]
+kl_optim$K[,,][5000]
+kl_optim$Sigma.xx.rec[,,][5000]
+kl_optim$Sigma.yy.rec[,,][5000]
+kl_optim$Sigma.xx.pred[,,][5000]
+kl_optim$Sigma.yy.pred[,,][5000]
+Y[5000]
+
+
+# standardized one step prediction errors
+pred_errors <- (kl_optim$pred[2:5000] - Y[2:5000])/(sqrt(kl_optim$Sigma.yy.pred[2:5000]))
+plot(Days[2:5000],pred_errors,type="l",xlab="Days from start",ylab="Prediction error [PSU]",main="Standardized prediction errors")
+# Zoomed in
+plot(Days[801:951],pred_errors[800:950],xlab="Days from start",ylab="Prediction error [PSU]",main="Standardized prediction errors (Zoomed in)")
 
